@@ -1,15 +1,18 @@
 package index
 
 import (
-	"io"
 	"net/http"
-	"strings"
 
 	"github.com/julienschmidt/httprouter"
+
+	templates "photo-blog/utils"
 )
 
 // Index Page
 func Index(res http.ResponseWriter, req *http.Request, _ httprouter.Params) {
-	content := strings.NewReader("This is an index page!")
-	io.Copy(res, content)
+	tpl := templates.LoadTemplatesGlob()
+	err := tpl.ExecuteTemplate(res, "index.html", nil)
+	if err != nil {
+		panic(err)
+	}
 }

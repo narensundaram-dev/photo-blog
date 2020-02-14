@@ -2,16 +2,21 @@ package login
 
 import (
 	"net/http"
+	"text/template"
 
 	"github.com/julienschmidt/httprouter"
 
 	templates "photo-blog/utils"
 )
 
+var tpl *template.Template
+
+func init() {
+	tpl = templates.LoadTemplatesGlob()
+}
+
 // Get Handler
 func Get(res http.ResponseWriter, req *http.Request, _ httprouter.Params) {
-	tpl := templates.LoadTemplatesGlob()
-
 	defer func() {
 		if err := recover(); err != nil {
 			res.WriteHeader(500)
@@ -25,8 +30,6 @@ func Get(res http.ResponseWriter, req *http.Request, _ httprouter.Params) {
 
 // Post Handler
 func Post(res http.ResponseWriter, req *http.Request, _ httprouter.Params) {
-	tpl := templates.LoadTemplatesGlob()
-
 	defer func() {
 		if err := recover(); err != nil {
 			res.WriteHeader(500)

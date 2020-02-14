@@ -1,10 +1,14 @@
 package main
 
 import (
+	"fmt"
+	"log"
 	"net/http"
 
-	_ "github.com/jinzhu/gorm/dialects/sqlite"
 	"github.com/julienschmidt/httprouter"
+
+	"photo-blog/models"
+	"photo-blog/models/db"
 
 	"photo-blog/controllers/index"
 
@@ -13,9 +17,19 @@ import (
 	"photo-blog/controllers/auth/signup"
 )
 
+// User Model
+type User models.User
+
+// Photo Model
+type Photo models.Photo
+
 func main() {
+	db := db.OpenDBConnection()
+	defer db.Close()
+
 	router := getRouter()
-	http.ListenAndServe(":8080", router)
+	fmt.Printf("Server opens on port: 8080\n\n")
+	log.Fatal(http.ListenAndServe(":8080", router))
 }
 
 func getRouter() *httprouter.Router {

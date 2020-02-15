@@ -42,5 +42,6 @@ func Post(res http.ResponseWriter, req *http.Request, _ httprouter.Params) {
 	// password := req.Form.Get("password")
 	// fmt.Println(username, password)
 
+	http.SetCookie(res, &http.Cookie{Name: "token", Value: "123"})
 	http.Redirect(res, req, "/", http.StatusSeeOther)
 }

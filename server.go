@@ -7,8 +7,8 @@ import (
 
 	"github.com/julienschmidt/httprouter"
 
-	"photo-blog/models"
 	"photo-blog/models/db"
+	auth "photo-blog/utils/middlewares"
 
 	"photo-blog/controllers/index"
 
@@ -16,12 +16,6 @@ import (
 	"photo-blog/controllers/auth/logout"
 	"photo-blog/controllers/auth/signup"
 )
-
-// User Model
-type User models.User
-
-// Photo Model
-type Photo models.Photo
 
 func main() {
 	db := db.OpenDBConnection()
@@ -36,7 +30,7 @@ func getRouter() *httprouter.Router {
 	router := httprouter.New()
 
 	// Index Page
-	router.GET("/", index.Index)
+	router.GET("/", auth.IsAuthenticated(index.Index))
 
 	// Auth Routers
 	router.GET("/signup", signup.Get)

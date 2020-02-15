@@ -2,17 +2,27 @@
 <html>
 
 <body>
-    <form action="/login" method="post">
+
+    <h3>Login</h3>
+    <form action="/login" method="POST">
         <div class="container">
-            <label for="uname"><b>Username</b></label>
-            <input type="text" placeholder="Enter Username" name="username" required>
+            <p>
+                <label for="uname"><b>Username</b></label>
+                <input type="text" placeholder="Enter Username" name="username" required>
+            </p>
 
-            <label for="psw"><b>Password</b></label>
-            <input type="password" placeholder="Enter Password" name="password" required>
+            <p>
+                <label for="psw"><b>Password</b></label>
+                <input type="password" placeholder="Enter Password" name="password" required>
+            </p>
 
-            <button type="submit">Login</button>
+            <p>
+                <button type="submit">Login</button> Or
+                <a href="/signup">Signup</a>
+            </p>
         </div>
     </form>
+
 </body>
 
 </html>

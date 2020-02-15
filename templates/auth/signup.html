@@ -2,19 +2,34 @@
 <html>
 
 <body>
+    <h3>Signup</h3>
     <form action="/signup" method="post">
         <div class="container">
-            <label for="name"><b>Name</b></label>
-            <input type="text" placeholder="Enter Name" name="name" required>
+            <p>
+                <label for="name"><b>Name</b></label>
+                <input type="text" placeholder="Enter Name" name="name" required>
+            </p>
 
+            <p>
+                <label for="username"><b>Username</b></label>
+                <input type="text" placeholder="Enter Username" name="username" required>
+            </p>
 
-            <label for="username"><b>Username</b></label>
-            <input type="text" placeholder="Enter Username" name="username" required>
+            <p>
+                <label for="password"><b>Password</b></label>
+                <input type="password" placeholder="Enter Password" name="password" required>
+            </p>
 
-            <label for="password"><b>Password</b></label>
-            <input type="password" placeholder="Enter Password" name="password" required>
-
-            <button type="submit">Signup</button>
+            <p>
+                <button type="submit">Signup</button> Or
+                <a href="/login">Login</a>
+            </p>
+        </div>
+        <div class="error" style="color: red;">
+            {{if .Error}}
+                <p>{{.Error.Message}}</p>
+                <p>{{.Error.Description}}</p>
+            {{end}}
         </div>
     </form>
 </body>

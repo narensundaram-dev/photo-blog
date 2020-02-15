@@ -35,6 +35,7 @@ func OpenDBConnection() *gorm.DB {
 	migrate(db)
 
 	db.DB().SetMaxIdleConns(10)
+	db.DB().SetMaxOpenConns(100)
 	// db.LogMode(true)
 
 	DB = db

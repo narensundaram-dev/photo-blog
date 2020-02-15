@@ -6,8 +6,12 @@ import (
 
 	"github.com/julienschmidt/httprouter"
 
+	session "photo-blog/utils"
 	templates "photo-blog/utils"
 )
+
+// Session to get and set auth token
+var Session session.Session = session.Session{}
 
 var tpl *template.Template
 
@@ -42,6 +46,6 @@ func Post(res http.ResponseWriter, req *http.Request, _ httprouter.Params) {
 	// password := req.Form.Get("password")
 	// fmt.Println(username, password)
 
-	http.SetCookie(res, &http.Cookie{Name: "token", Value: "123"})
+	Session.Set(res, "123")
 	http.Redirect(res, req, "/", http.StatusSeeOther)
 }

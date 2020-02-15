@@ -1,17 +1,22 @@
 package middlewares
 
 import (
+	"log"
 	"net/http"
 	"text/template"
 
 	"github.com/julienschmidt/httprouter"
 
 	"photo-blog/models"
+	session "photo-blog/utils"
 	templates "photo-blog/utils"
 )
 
 // User Model
 type User models.User
+
+// Session to get and set auth token
+var Session session.Session = session.Session{}
 
 var tpl *template.Template
 
@@ -24,17 +29,15 @@ func IsAuthenticated(handler httprouter.Handle) httprouter.Handle {
 	return func(res http.ResponseWriter, req *http.Request, params httprouter.Params) {
 		defer func() {
 			if err := recover(); err != nil {
-				panic(err)
+				log.Fatal(err)
 			}
 		}()
 
-		token, err := req.Cookie("token")
-		if err != nil {
+		token := Session.Get(req)
+		if token == "" {
 			http.Redirect(res, req, "/login", http.StatusSeeOther)
-		} else if token.Value == "123" {
-			handler(res, req, params)
 		} else {
-			panic("Invalid token")
+			handler(res, req, params)
 		}
 	}
 }

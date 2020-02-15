@@ -8,16 +8,18 @@ import (
 	"github.com/julienschmidt/httprouter"
 
 	"photo-blog/models/db"
-	auth "photo-blog/utils/middlewares"
+	mw "photo-blog/utils/middlewares"
 
 	"photo-blog/controllers/index"
 
 	"photo-blog/controllers/auth/login"
 	"photo-blog/controllers/auth/logout"
 	"photo-blog/controllers/auth/signup"
+	"photo-blog/controllers/echo"
 )
 
 func main() {
+	// Open DB Connection
 	db := db.OpenDBConnection()
 	defer db.Close()
 
@@ -30,7 +32,7 @@ func getRouter() *httprouter.Router {
 	router := httprouter.New()
 
 	// Index Page
-	router.GET("/", auth.IsAuthenticated(index.Index))
+	router.GET("/", mw.IsAuthenticated(index.Index))
 
 	// Auth Routers
 	router.GET("/signup", signup.Get)
@@ -38,6 +40,13 @@ func getRouter() *httprouter.Router {
 	router.GET("/login", login.Get)
 	router.POST("/login", login.Post)
 	router.POST("/logout", logout.Post)
+
+	// Sample JSON Reponse
+	router.Handler("POST", "/api/echo/body", echo.Echo{})
+	router.Handler("GET", "/api/echo/body", echo.Echo{})
+
+	// Serve File
+	router.GET("/serve/file", echo.ServeFile)
 
 	return router
 }

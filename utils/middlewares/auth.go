@@ -7,6 +7,8 @@ import (
 	"github.com/julienschmidt/httprouter"
 
 	"photo-blog/models"
+	"photo-blog/models/db"
+	jwt "photo-blog/utils"
 	session "photo-blog/utils"
 	templates "photo-blog/utils"
 )
@@ -30,6 +32,16 @@ func IsAuthenticated(handler httprouter.Handle) httprouter.Handle {
 		if token == "" {
 			http.Redirect(res, req, "/login", http.StatusSeeOther)
 		} else {
+			user := User{}
+			db.Get().First(&user, "token = ?", token)
+			if user == (User{}) {
+				http.Redirect(res, req, "/login", http.StatusSeeOther)
+			}
+			j := jwt.Jwt{UID: user.ID, Name: user.Name, Username: user.Username}
+			isValid := j.ValidateToken(token)
+			if !isValid {
+				http.Redirect(res, req, "/login", http.StatusSeeOther)
+			}
 			handler(res, req, params)
 		}
 	}

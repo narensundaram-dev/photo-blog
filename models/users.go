@@ -9,7 +9,8 @@ import (
 // User Model
 type User struct {
 	gorm.Model
-	Name     string
-	Username string
-	Password string
+	Name     string `goorm:"column:name;not null"`
+	Username string `gorm:"unique;not null"`
+	Password string `goorm:"column:password;not null"`
+	Token    string `goorm:"column:token"`
 }

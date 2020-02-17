@@ -11,6 +11,7 @@ import (
 
 	"photo-blog/models"
 	"photo-blog/models/db"
+	encrypt "photo-blog/utils"
 	response "photo-blog/utils"
 	templates "photo-blog/utils"
 )
@@ -60,12 +61,19 @@ func Post(res http.ResponseWriter, req *http.Request, _ httprouter.Params) {
 	name := req.Form["name"][0]
 	username := req.Form["username"][0]
 	password := req.Form["password"][0]
+	hashPassword := encrypt.HashPassword(password)
+
+	user := User{}
+	db.Get().First(&user, "username = ?", username)
+	if user != (User{}) {
+		panic("Already a registered user!")
+	}
 
 	// Push it to DB
 	result := db.Get().Create(&User{
 		Name:     name,
 		Username: username,
-		Password: password,
+		Password: hashPassword,
 	})
 	if err := result.Error; err != nil {
 		panic(err)

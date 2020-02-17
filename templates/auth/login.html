@@ -21,6 +21,12 @@
                 <a href="/signup">Signup</a>
             </p>
         </div>
+        <div class="error" style="color: red;">
+            {{if .Error}}
+                <p>{{.Error.Message}}</p>
+                <p>{{.Error.Description}}</p>
+            {{end}}
+        </div>
     </form>
 
 </body>

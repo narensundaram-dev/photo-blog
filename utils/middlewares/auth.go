@@ -1,7 +1,6 @@
 package middlewares
 
 import (
-	"log"
 	"net/http"
 	"text/template"
 
@@ -27,12 +26,6 @@ func init() {
 // IsAuthenticated is a middleware to check whether the requested user is whether authenticated or not.
 func IsAuthenticated(handler httprouter.Handle) httprouter.Handle {
 	return func(res http.ResponseWriter, req *http.Request, params httprouter.Params) {
-		defer func() {
-			if err := recover(); err != nil {
-				log.Fatal(err)
-			}
-		}()
-
 		token := Session.Get(req)
 		if token == "" {
 			http.Redirect(res, req, "/login", http.StatusSeeOther)

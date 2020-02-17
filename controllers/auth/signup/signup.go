@@ -31,7 +31,7 @@ func init() {
 func Get(res http.ResponseWriter, req *http.Request, _ httprouter.Params) {
 	defer func() {
 		if err := recover(); err != nil {
-			res.WriteHeader(500)
+			res.WriteHeader(http.StatusInternalServerError)
 			msg := fmt.Sprintf("Something's wrong loading the page: %s", err)
 			io.Copy(res, strings.NewReader(msg))
 		}

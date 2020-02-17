@@ -13,7 +13,7 @@ func (s *Session) Set(res http.ResponseWriter, token string) {
 	cookie := &http.Cookie{
 		Name:    "token",
 		Value:   token,
-		Expires: time.Now().AddDate(0, 0, 1),
+		Expires: time.Now().AddDate(0, 0, 1), // expires in a day
 	}
 	http.SetCookie(res, cookie)
 }

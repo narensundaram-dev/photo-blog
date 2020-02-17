@@ -24,7 +24,7 @@ func main() {
 	defer db.Close()
 
 	router := getRouter()
-	fmt.Printf("Server opens on port: 8080\n\n")
+	fmt.Printf("Server opens up on port: 8080\n\n")
 	log.Fatal(http.ListenAndServe(":8080", router))
 }
 
@@ -32,21 +32,23 @@ func getRouter() *httprouter.Router {
 	router := httprouter.New()
 
 	// Index Page
-	router.GET("/", mw.IsAuthenticated(index.Index))
+	router.GET("/", mw.HandleError(
+		mw.IsAuthenticated(index.Index)))
 
 	// Auth Routers
-	router.GET("/signup", signup.Get)
-	router.POST("/signup", signup.Post)
-	router.GET("/login", login.Get)
-	router.POST("/login", login.Post)
-	router.POST("/logout", logout.Post)
+	router.GET("/signup", mw.HandleError(signup.Get))
+	router.POST("/signup", mw.HandleError(signup.Post))
+	router.GET("/login", mw.HandleError(login.Get))
+	router.POST("/login", mw.HandleError(login.Post))
+	router.POST("/logout", mw.HandleError(logout.Post))
 
 	// Sample JSON Reponse
 	router.Handler("POST", "/api/echo/body", echo.Echo{})
 	router.Handler("GET", "/api/echo/body", echo.Echo{})
 
 	// Serve File
-	router.GET("/serve/file", echo.ServeFile)
+	router.GET("/download/file", mw.HandleError(echo.DownloadFile))
+	router.POST("/upload/file", mw.HandleError(echo.UploadFile))
 
 	return router
 }

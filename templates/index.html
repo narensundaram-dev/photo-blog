@@ -2,12 +2,51 @@
 
 <body>
     <div class="container">
-        <nav>
+        <h2>Photo Blog - Homepage</h2>
+        <br/>
+        <nav style="float:right">
             <form action="/logout" method="POST">
                 <button type="submit">Logout</button>
             </form>
         </nav>
-        <h1>This is an index page!</h1>
+        <br/><br/><hr/>
+
+        <h3>Hey {{.Data.Body.Name}}, Upload your photo here!</h3>
+        <form action="/upload/file" method="post" enctype="multipart/form-data">
+
+            <div>
+                <span>
+                    <strong>Photo: </strong>
+                    <input type="file" name="photo"/>
+                </span>
+            </div>
+            <br/><br/>
+            <div>
+                <span>
+                    <strong>Description: </strong>
+                    <input type="text" name="description"/>
+                </span>
+                <button type="submit">Upload</button>
+            </div>
+            <br/><br/><hr/>
+        </form>
+
+        <div>
+            <h3>Your pics here...</h3>
+            <div style="display: flex;">
+                {{range .Data.Body.Photos}}
+                    <figure>
+                        <img src="static/{{.RelativePath}}" alt="{{.RelativePath}}" width="200" height="200"/>
+                        <figcaption>
+                            <p>{{.Caption}}</p>
+                            <span><a href="/like">Likes</a></span>
+                            <span><a href="/comment">Comments</a></span>
+                            <span><a href="/delete">Delete</a></span>
+                        </figcaption>
+                    </figure>
+                {{end}}
+            </div>
+        </div>
     </div>
 </body>
 

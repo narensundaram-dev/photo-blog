@@ -9,6 +9,8 @@ import (
 // Photo Model
 type Photo struct {
 	gorm.Model
-	Path   string `goorm:"column:path;not null"`
-	UserID int64  `goorm:"column:user_id;not null"`
+	Path         string `goorm:"column:path;not null"`
+	RelativePath string `goorm:"column:relative_path;not null"`
+	UserID       uint   `goorm:"column:user_id;not null"`
+	Caption      string `goorm:"column:caption"`
 }

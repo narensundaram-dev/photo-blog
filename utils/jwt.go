@@ -37,15 +37,48 @@ func (j *Jwt) GenerateToken() string {
 
 // ValidateToken validates JWT Token
 func (j *Jwt) ValidateToken(tokenStr string) bool {
+	token := j.GetTokenMust(tokenStr)
+
+	if !token.Valid {
+		return false
+	} else {
+		return true
+	}
+}
+
+// GetTokenMust returns Token struct or panics if any error
+func (j *Jwt) GetTokenMust(tokenStr string) *jwt.Token {
 	claims := jwt.MapClaims{}
 	token, err := jwt.ParseWithClaims(tokenStr, claims, func(token *jwt.Token) (interface{}, error) {
 		return JWTSecret, nil
 	})
 	if err != nil {
-		return false
-	} else if !token.Valid {
-		return false
-	} else {
-		return true
+		panic(err)
 	}
+	return token
+}
+
+// GetUserInfo parses the user info from token and returns the same
+func (j *Jwt) GetUserInfo(tokenStr string) *Jwt {
+	token := j.GetTokenMust(tokenStr)
+	claims := token.Claims.(jwt.MapClaims)
+
+	if userID, ok := claims["uid"].(float64); ok {
+		j.UID = uint(userID)
+	} else {
+		panic("invalid token: uid in token is not of a type uint convertible")
+	}
+
+	if userName, ok := claims["username"].(string); ok {
+		j.Username = userName
+	} else {
+		panic("invalid token: username in token is not of a type string")
+	}
+
+	if name, ok := claims["name"].(string); ok {
+		j.Name = name
+	} else {
+		panic("invalid token: name in token is not of a type string")
+	}
+	return j
 }

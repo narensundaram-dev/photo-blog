@@ -4,17 +4,9 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
-	"io"
 	"log"
 	"net/http"
-	"os"
-	fp "path/filepath"
-	"strings"
 	"time"
-
-	"github.com/julienschmidt/httprouter"
-
-	photos "photo-blog/utils"
 )
 
 // Echo Restful API - Sample Web Service
@@ -75,53 +67,4 @@ func (e *Echo) Error(res http.ResponseWriter, status int, message string) {
 	err := struct{ Message string }{message}
 	body, _ := json.Marshal(err)
 	res.Write(body)
-}
-
-// DownloadFile to send file as response
-func DownloadFile(res http.ResponseWriter, req *http.Request, params httprouter.Params) {
-	file, err := os.Open("/home/naren/Desktop/show.txt")
-	if err != nil {
-		res.WriteHeader(http.StatusNotFound)
-	} else {
-		fnameArr := strings.Split(file.Name(), "/")
-		fname := fnameArr[len(fnameArr)-1]
-		dispose := fmt.Sprintf(`attachment; filename="%s"`, fname)
-		res.Header().Set("Content-Disposition", dispose)
-		res.Header().Set("Content-Type", "text/plain")
-
-		fstat, _ := file.Stat()
-		size := fmt.Sprintf("%v", fstat.Size())
-		res.Header().Set("Content-Length", size)
-
-		res.WriteHeader(http.StatusOK)
-		http.ServeFile(res, req, file.Name())
-	}
-	defer file.Close()
-
-}
-
-// UploadFile to get file from request
-func UploadFile(res http.ResponseWriter, req *http.Request, params httprouter.Params) {
-	req.ParseMultipartForm(1024 * 1024 * 5) // Max size 5242880 bytes. (i.e) 5 MB
-
-	photo, header, err := req.FormFile("photo")
-	if err != nil {
-		panic(err)
-	}
-	defer photo.Close()
-
-	mediaPath, err := photos.GetMediaPath()
-	if err != nil {
-		panic(err)
-	}
-	filePath := fp.Join(mediaPath, header.Filename)
-	file, err := os.OpenFile(filePath, os.O_WRONLY|os.O_CREATE, 0666)
-	if err != nil {
-		panic(err)
-	}
-	defer file.Close()
-
-	io.Copy(file, photo)
-	res.Header().Set("Content-Type", "application/json")
-	res.WriteHeader(http.StatusOK)
 }

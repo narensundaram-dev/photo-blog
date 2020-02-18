@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"os"
 
 	"github.com/julienschmidt/httprouter"
 
@@ -34,6 +35,8 @@ func getRouter() *httprouter.Router {
 	// Index Page
 	router.GET("/", mw.HandleError(
 		mw.IsAuthenticated(index.Index)))
+	router.GET("/home", mw.HandleError(
+		mw.IsAuthenticated(index.Index)))
 
 	// Auth Routers
 	router.GET("/signup", mw.HandleError(signup.Get))
@@ -42,13 +45,19 @@ func getRouter() *httprouter.Router {
 	router.POST("/login", mw.HandleError(login.Post))
 	router.POST("/logout", mw.HandleError(logout.Post))
 
+	// Upload/Download File
+	router.POST("/upload/file", mw.HandleError(
+		mw.IsAuthenticated(index.UploadFile)))
+	router.GET("/download/file", mw.HandleError(
+		mw.IsAuthenticated(index.DownloadFile)))
+
 	// Sample JSON Reponse
 	router.Handler("POST", "/api/echo/body", echo.Echo{})
 	router.Handler("GET", "/api/echo/body", echo.Echo{})
 
-	// Serve File
-	router.GET("/download/file", mw.HandleError(echo.DownloadFile))
-	router.POST("/upload/file", mw.HandleError(echo.UploadFile))
+	// Serving Media Files
+	wd, _ := os.Getwd()
+	router.ServeFiles("/static/*filepath", http.Dir(wd))
 
 	return router
 }

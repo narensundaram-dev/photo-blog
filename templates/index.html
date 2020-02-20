@@ -21,6 +21,7 @@
         <br/>
         <nav style="float:right">
             <form action="/logout" method="POST">
+                <a href="/users">Registered Users</a>
                 <button type="submit">Logout</button>
             </form>
         </nav>
@@ -56,14 +57,14 @@
                             <p>
                                 <span>
                                     <span>{{.Caption}}</span>
-                                    <span style="float:right;">
-                                        <a href="/download/file/{{.ID}}">Download</a>
-                                    </span>
                                 </span>
                             </p>
-                            <span><a href="/like">Likes</a></span>
-                            <span><a href="/comment">Comments</a></span>
-                            <span><a id="deleteFile" href="/delete/file/{{.ID}}">Delete</a></span>
+                            <span>
+                                <a href="/download/file/{{.ID}}">Download</a>
+                                <a id="deleteFile" href="/delete/file/{{.ID}}">Delete</a>
+                            </span>
+                            <!-- <span><a href="/likes">Likes</a></span>
+                            <span><a href="/comments">Comments</a></span> -->
                         </figcaption>
                     </figure>
                 {{end}}

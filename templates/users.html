@@ -1,0 +1,28 @@
+<html>
+
+<body>
+    <div class="container">
+        <h2>Phlog - Registered users</h2>
+        <nav style="float:right">
+            <form action="/logout" method="POST">
+                <a href="/home">Home</a>
+                <button type="submit">Logout</button>
+            </form>
+        </nav>
+        <br/><br/><br/><br/><hr/>
+
+        <div>
+            <div style="display: flex;">
+                <ul>
+                    {{range .Data.Body.Users}}
+                        <li>
+                            <a href="users/{{.ID}}">{{.Name}} ({{.Username}})</a>
+                        </li>
+                    {{end}}
+                </ul>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

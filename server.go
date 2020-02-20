@@ -17,6 +17,7 @@ import (
 	"photo-blog/controllers/auth/logout"
 	"photo-blog/controllers/auth/signup"
 	"photo-blog/controllers/echo"
+	"photo-blog/controllers/users"
 )
 
 func main() {
@@ -54,6 +55,9 @@ func getRouter() *httprouter.Router {
 		mw.IsAuthenticated(index.DeleteFile)))
 	router.GET("/delete/file/:id", mw.HandleError(
 		mw.IsAuthenticated(index.DeleteFile)))
+
+	// Users and their Photos
+	router.GET("/users", mw.HandleError(mw.IsAuthenticated(users.Get)))
 
 	// Sample JSON Reponse
 	router.Handler("POST", "/api/echo/body", echo.Echo{})

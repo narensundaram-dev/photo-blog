@@ -70,5 +70,5 @@ func Post(res http.ResponseWriter, req *http.Request, _ httprouter.Params) {
 	db.Get().Model(&user).Update("token", token)
 
 	Session.Set(res, token)
-	http.Redirect(res, req, "/", http.StatusSeeOther)
+	http.Redirect(res, req, "/home", http.StatusSeeOther)
 }

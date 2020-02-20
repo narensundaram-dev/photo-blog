@@ -36,7 +36,7 @@ func getRouter() *httprouter.Router {
 	router.GET("/", mw.HandleError(
 		mw.IsAuthenticated(index.Index)))
 	router.GET("/home", mw.HandleError(
-		mw.IsAuthenticated(index.Index)))
+		mw.IsAuthenticated(index.Home)))
 
 	// Auth Routers
 	router.GET("/signup", mw.HandleError(signup.Get))
@@ -48,8 +48,12 @@ func getRouter() *httprouter.Router {
 	// Upload/Download File
 	router.POST("/upload/file", mw.HandleError(
 		mw.IsAuthenticated(index.UploadFile)))
-	router.GET("/download/file", mw.HandleError(
+	router.GET("/download/file/:id", mw.HandleError(
 		mw.IsAuthenticated(index.DownloadFile)))
+	router.DELETE("/delete/file/:id", mw.HandleError(
+		mw.IsAuthenticated(index.DeleteFile)))
+	router.GET("/delete/file/:id", mw.HandleError(
+		mw.IsAuthenticated(index.DeleteFile)))
 
 	// Sample JSON Reponse
 	router.Handler("POST", "/api/echo/body", echo.Echo{})

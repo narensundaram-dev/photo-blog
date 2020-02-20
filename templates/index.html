@@ -1,8 +1,23 @@
 <html>
 
+<header>
+    <script type="text/javascript">
+        window.onload=function() {
+            document.getElementById("deleteFile").onclick=function() {
+                var form = document.createElement("form");
+                form.action = this.href;
+                form.method = "DELETE";
+                document.body.appendChild(form);
+                form.submit();
+                return false;
+            }
+        }
+    </script>
+</header>
+
 <body>
     <div class="container">
-        <h2>Photo Blog - Homepage</h2>
+        <h2>Phlog - Homepage</h2>
         <br/>
         <nav style="float:right">
             <form action="/logout" method="POST">
@@ -11,8 +26,8 @@
         </nav>
         <br/><br/><hr/>
 
-        <h3>Hey {{.Data.Body.Name}}, Upload your photo here!</h3>
-        <form action="/upload/file" method="post" enctype="multipart/form-data">
+        <h3>Hey <i style="color: lightseagreen;">{{.Data.Body.Name}}</i>, Upload your photo here!</h3>
+        <form action="/upload/file" method="POST" enctype="multipart/form-data">
 
             <div>
                 <span>
@@ -23,8 +38,8 @@
             <br/><br/>
             <div>
                 <span>
-                    <strong>Description: </strong>
-                    <input type="text" name="description"/>
+                    <strong>Caption: </strong>
+                    <input type="text" name="caption"/>
                 </span>
                 <button type="submit">Upload</button>
             </div>
@@ -38,12 +53,34 @@
                     <figure>
                         <img src="static/{{.RelativePath}}" alt="{{.RelativePath}}" width="200" height="200"/>
                         <figcaption>
-                            <p>{{.Caption}}</p>
+                            <p>
+                                <span>
+                                    <span>{{.Caption}}</span>
+                                    <span style="float:right;">
+                                        <a href="/download/file/{{.ID}}">Download</a>
+                                    </span>
+                                </span>
+                            </p>
                             <span><a href="/like">Likes</a></span>
                             <span><a href="/comment">Comments</a></span>
-                            <span><a href="/delete">Delete</a></span>
+                            <span><a id="deleteFile" href="/delete/file/{{.ID}}">Delete</a></span>
                         </figcaption>
                     </figure>
+                {{end}}
+            </div>
+
+            <br/><br/><hr/>
+            <div style="text-align:center;">
+                {{if .Data.Body.Previous}}
+                    <a href="/home?page={{.Data.Body.PreviousPageNo}}">Previous</a>
+                {{else}}
+                    <a>Previous</a>
+                {{end}}
+
+                {{if .Data.Body.Next}}
+                    <a href="/home?page={{.Data.Body.NextPageNo}}">Next</a>
+                {{else}}
+                    <a>Next</a>
                 {{end}}
             </div>
         </div>

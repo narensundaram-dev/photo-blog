@@ -45,7 +45,7 @@ func OpenDBConnection() *gorm.DB {
 // Get returns sqlite db drive
 func Get() *gorm.DB {
 	if DB == nil {
-		panic("DB is not initialized!")
+		panic("DB is not initialized yet!")
 	} else {
 		return DB
 	}

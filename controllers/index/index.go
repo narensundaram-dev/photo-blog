@@ -65,7 +65,7 @@ func Home(res http.ResponseWriter, req *http.Request, params httprouter.Params) 
 		},
 		Error: response.Error{Message: ""},
 	}
-	err := tpl.ExecuteTemplate(res, "index.html", response)
+	err := tpl.ExecuteTemplate(res, "home.html", response)
 	if err != nil {
 		panic(err)
 	}

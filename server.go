@@ -58,6 +58,7 @@ func getRouter() *httprouter.Router {
 
 	// Users and their Photos
 	router.GET("/users", mw.HandleError(mw.IsAuthenticated(users.Get)))
+	router.GET("/users/:username", mw.HandleError(mw.IsAuthenticated(users.UserPhotos)))
 
 	// Sample JSON Reponse
 	router.Handler("POST", "/api/echo/body", echo.Echo{})

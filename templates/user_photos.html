@@ -1,0 +1,55 @@
+<html>
+
+<body>
+    <div class="container">
+        <h2>Phlog - {{.Data.Body.Name}} Page</h2>
+        <br/>
+        <nav style="float:right">
+            <form action="/logout" method="POST">
+                <a href="/home">Home</a>
+                <button type="submit">Logout</button>
+            </form>
+        </nav>
+        <br/><br/><hr/>
+
+        <div>
+            <h3>{{.Data.Body.Name}} pics here...</h3>
+            <div style="display: flex;">
+                {{range .Data.Body.Photos}}
+                    <figure>
+                        <img src="../static/{{.RelativePath}}" alt="{{.RelativePath}}" width="200" height="200"/>
+                        <figcaption>
+                            <p>
+                                <span>
+                                    <span>{{.Caption}}</span>
+                                </span>
+                            </p>
+                            <span>
+                                <a href="/download/file/{{.ID}}">Download</a>
+                            </span>
+                            <!-- <span><a href="/likes">Likes</a></span>
+                            <span><a href="/comments">Comments</a></span> -->
+                        </figcaption>
+                    </figure>
+                {{end}}
+            </div>
+
+            <br/><br/><hr/>
+            <div style="text-align:center;">
+                {{if .Data.Body.Previous}}
+                    <a href="/users/{{.Data.Body.UserName}}?page={{.Data.Body.PreviousPageNo}}">Previous</a>
+                {{else}}
+                    <a>Previous</a>
+                {{end}}
+
+                {{if .Data.Body.Next}}
+                    <a href="/users/{{.Data.Body.UserName}}?page={{.Data.Body.NextPageNo}}">Next</a>
+                {{else}}
+                    <a>Next</a>
+                {{end}}
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

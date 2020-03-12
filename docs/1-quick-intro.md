@@ -1,26 +1,28 @@
 *[Home](../README.md)*
 
-## Quick Setup:
+## Quick Overview:
 
-- Basic Syntax (Hello, World!)
-- Package
-- Data Types
-- Array & Slice
-- Struct & Map
-- Variables
-- Constants
-- Operators
-- Decision Making
-- Loops
-- Functions
-- Scope Rules
-- Range
-- Recursion
-- Type Casting
-- Interfaces
-- Error Handling
+- [Basic Syntax (Hello, World!)](#basic-syntax)
+- [Package](#package)
+- [Data Types](#data-types)
+- [Array & Slice](#**3.-array-&-slice**)
+- [Pointers](#pointers)
+- [Struct & Map](#**4.-struct-&-map**)
+- [Variables](#variables)
+- [Constants](#constants)
+- [Operators](#operators)
+- [Decision Making](#decision-making)
+- [Loops](#loops)
+- [Functions](#functions)
+- [Scope Rules](#scope-rules)
+- [Range](#range)
+- [Recursion](#recursion)
+- [Type Casting](#type-casting)
+- [Type Assertion](#type-assertion)
+- [Interface](#interface)
+- [Error Handling](#error-handling)
 
-## Hello, World!
+## Basic Syntax
 
 ``` Go
 package main
@@ -37,6 +39,7 @@ func main() {
 - A Package is a folder (of one or many *.go files)
 - A Root package is a main package
 - A sub-package is a sub folder
+- A package other than main is a dependency package
 - No main, No run
 - One package, One name
 - [Third Party Packages](https://awesome-go.com)
@@ -49,7 +52,7 @@ func main() {
 3. Array and Slice (Index based)
 4. Struct and Map (Key-Value based)
 
-**3. Array & Slice**
+## **3. Array & Slice**
 
 |Array|Slice  |
 |--|--|
@@ -80,7 +83,31 @@ func  main() {
 }
 ```
 
-**4. Struct & Map**
+## Pointers
+
+1. The pointers are the reference variables that doesn't hold the actual value but the memory address that refers the value.
+2. Keywords: *, &
+3. * -> to get the pointer to the value from memory address
+4. & -> to get the memory address of the value from a pointer
+
+``` Go
+package main
+
+import "fmt"
+
+func main() {
+	slc := []int{1, 2, 3} /* actual variable declaration */
+	slcPtr := &slc        /* converts value to address and stored in pointer variable */
+
+	/* address stored in pointer variable */
+	fmt.Printf("Address: %p\n", slcPtr)
+	/* access the value using the pointer */
+	fmt.Printf("Value: %v\n", *slcPtr)
+}
+
+```
+
+## **4. Struct & Map**
 
 |Struct|Map  |
 |--|--|
@@ -255,6 +282,55 @@ func main() {
 
 ```
 
+## Loops
+
+- Normal for loop
+
+``` Go
+package main
+
+import "fmt"
+
+func main() {
+	for i := 0; i < 10; i++ {
+		fmt.Println(i)
+	}
+}
+
+```
+
+- [For is Go's while](https://tour.golang.org/flowcontrol/3)
+
+``` Go
+package main
+
+import "fmt"
+
+func main() {
+	sum := 1
+	for sum < 1000 {
+		sum += sum
+	}
+	fmt.Println(sum)
+}
+
+```
+
+- To run forever
+
+``` Go
+package main
+
+import "fmt"
+
+func main() {
+	for {
+		fmt.Printf("This loop will run forever.\n")
+	}
+}
+
+```
+
 ## Functions
 
 - A simple number swapping using golang function
@@ -412,12 +488,128 @@ func main() {
 
 ## Type Casting
 
+1. String to Number
+2. Number to String
+3. Array to Slice
+4. Struct to Map
+
+- String to Number
+
 ``` Go
+package main
+
+import (
+	"fmt"
+	"strconv"
+)
+
+func main() {
+	numStr := "123"
+	num, err := strconv.Atoi(numStr)
+	if err != nil {
+		panic(err)
+	}
+	fmt.Printf("Type: %T, Value: %d\n", num, num)
+}
+
+```
+
+- Number to string
+
+``` Go
+package main
+
+import (
+	"fmt"
+	"strconv"
+)
+
+func main() {
+	num := 123
+	i := strconv.Itoa(num)
+	fmt.Printf("Type: %T, Value: %s\n", i, i)
+}
+
+```
+
+- Array to Slice
+
+``` Go
+package main
+
+import (
+	"fmt"
+)
+
+func main() {
+	arr := [3]int{1, 2, 3}
+	slc := arr[:]
+	fmt.Printf("Type: %T, Value: %v\n", slc, slc)
+
+	// slc = append(slc, 4, 5, 6) // to extend the slice
+	// fmt.Println(arr)
+}
+
+```
+
+- Struct to Map conversion (using json package)
+
+``` Go
+package main
+
+import (
+	"encoding/json"
+	"fmt"
+)
+
+// Person struct
+type Person struct {
+	Name     string
+	Age      int
+	Location string
+}
+
+func main() {
+	structToMapViaJSON()
+}
+
+func structToMapViaJSON() {
+	m := make(map[string]interface{})
+	person := Person{
+		Name:     "John",
+		Age:      25,
+		Location: "Chennai",
+	}
+	j, _ := json.Marshal(person)
+	json.Unmarshal(j, &m)
+	fmt.Println(string(j))
+}
+
 ```
 
 ## Type Assertion
 
 ``` Go
+package main
+
+import "fmt"
+
+func main() {
+	var i interface{} = "hello"
+
+	s := i.(string)
+	fmt.Println(s)
+
+	s, ok := i.(string)
+	fmt.Println(s, ok)
+
+	f, ok := i.(float64)
+	fmt.Println(f, ok)
+
+	f = i.(float64) // go panics here
+	fmt.Println(f)
+}
+
 ```
 
 ## Interface

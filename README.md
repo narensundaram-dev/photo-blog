@@ -38,7 +38,6 @@
 	- [Sqlite Database Connection (Model)](docs/2.1-model.md)
 	- [Templates (View)](docs/2.2-view.md)
 	- [Routers and Handlers (Controller)](docs/2.3-controller.md)
-- **[Error Handling](docs/3-error-handling.md)**
 - **[Middlewares](docs/4-middlewares.md)**
 - **[File Handling & Serving Files](docs/5-file-handling-and-serving-files)**
 - **[Sorting and Pagination](docs/6-sorting&pagination.md)**
